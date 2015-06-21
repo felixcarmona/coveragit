@@ -1,0 +1,16 @@
+{
+    "name": "felixcarmona/coveragit",
+    "bin": ["coveragit"],
+    "description":  "Check the uncovered code lines which have been modified or added in an specific pull request or commit",
+    "keywords":     ["coverage"],
+    "homepage":     "https://github.com/felixcarmona/coveragit",
+    "authors":      [
+        {
+            "name":      "Felix Carmona",
+            "email":     "mail@felixcarmona.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "~4.1.0"
+    }
+}
