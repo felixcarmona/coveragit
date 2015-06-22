@@ -8,7 +8,6 @@ from itertools import groupby
 from operator import itemgetter
 
 
-
 class CoverageProcessorException(Exception):
         pass
 
@@ -23,7 +22,13 @@ class AdditionsFinder(object):
         raw_diff_files = filter(None, raw_diff_files)  # remove empty elements from list
 
         for raw_diff_file in raw_diff_files:
-            file_name = re.findall(r'\nindex .*\n.*\n\+\+\+ b/(.*)\n', raw_diff_file, re.MULTILINE)[0]
+            file_name_matches = re.findall(r'\nindex .*\n.*\n\+\+\+ b/(.*)\n', raw_diff_file, re.MULTILINE)
+
+            # /dev/null matches
+            if len(file_name_matches) == 0:
+                continue
+
+            file_name = file_name_matches[0]
             additions[file_name] = []
             chunks = re.findall(r'^@@ .* \+(.*[^,0]) @@', raw_diff_file, re.MULTILINE)
             for chunk in reversed(chunks):
@@ -51,15 +56,10 @@ class CoverageProcessor(object):
             files_dom = xml_doc.getElementsByTagName('file')
 
             uncovered_code = {}
-            i = 1
             for file_dom in files_dom:
-                progress = 100 * float(i)/float(len(files_dom))
-                progress = int(progress)
-                sys.stdout.write('\r\033[36mProcessing coverage... [{0}{1}] {2}%\033[m'.format('#'*(progress/10), ' '*(10-progress/10), progress))
-                sys.stdout.flush()
                 uncovered_lines = []
 
-                lines_dom = xml_doc.getElementsByTagName('line')
+                lines_dom = file_dom.getElementsByTagName('line')
                 for line_dom in lines_dom:
                     count = int(line_dom.attributes['count'].value)
                     line_number = int(line_dom.attributes['num'].value)
@@ -72,16 +72,12 @@ class CoverageProcessor(object):
                     file_name = re.sub('^%s' % cwd, '', file_name)
                     uncovered_code[file_name] = uncovered_lines
 
-                i += 1
-            sys.stdout.write("\r")
-            sys.stdout.flush()
             return uncovered_code
-        except Exception:
+        except Exception as e:
             raise CoverageProcessorException("Invalid coverage .xml file '%s'" % xml_path)
 
     def get_missing_coverage(self, additions, xml_path):
         uncovered_code = self._get_uncovered_code(xml_path)
-
         missing_coverage = {}
 
         relevant_files = list(set(uncovered_code) & set(additions))
@@ -90,7 +86,8 @@ class CoverageProcessor(object):
             uncovered_lines = uncovered_code[file_name]
             relevant_lines = additions[file_name]
             uncovered_relevant_lines = list(set(uncovered_lines) & set(relevant_lines))
-            missing_coverage[file_name] = uncovered_relevant_lines
+            if uncovered_relevant_lines:
+                missing_coverage[file_name] = uncovered_relevant_lines
 
         return missing_coverage
 
@@ -186,7 +183,7 @@ class ConsoleApplication:
                     sys.exit(2)
             else:
                 print('\033[32m100% relevant lines covered\033[m')
-        except Exception as e:
+        except Exception:
             print("\033[31m %s\033[m" % e.message)
             sys.exit(2)
 
