@@ -1,13 +1,17 @@
-from os import popen
 import re
+from subprocess import Popen, PIPE
 
 
 class AdditionsFinder(object):
     @staticmethod
-    def get_additions_for_base(base):
+    def get_additions_for_base(base, repository_path):
         additions = {}
 
-        raw_diff = popen("git diff %s --unified=0" % base).read().strip()
+        command = ['git', 'diff', base, '--unified=0']
+
+        process = Popen(command, stdout=PIPE, cwd=repository_path)
+        raw_diff = process.communicate()[0]
+
         raw_diff_files = re.split('\ndiff', raw_diff)
         raw_diff_files = filter(None, raw_diff_files)  # remove empty elements from list
 
