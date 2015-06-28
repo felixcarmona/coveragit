@@ -1,6 +1,6 @@
 {
     "name": "felixcarmona/coveragit",
-    "bin": ["coveragit"],
+    "bin": ["bin/coveragit"],
     "description":  "Check the uncovered code lines which have been modified or added in an specific pull request or commit",
     "keywords":     ["coverage"],
     "homepage":     "https://github.com/felixcarmona/coveragit",
