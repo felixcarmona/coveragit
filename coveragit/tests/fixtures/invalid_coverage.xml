@@ -1,0 +1,28 @@
+INVALID <?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1435484690">
+  <project timestamp="1435484690">
+    <file name="/foo/bar/hello/world.php">
+      <class name="BarTest" namespace="global">
+        <metrics methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
+      </class>
+      <class name="Bar" namespace="global">
+        <metrics methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="2" elements="9" coveredelements="3"/>
+      </class>
+      <line num="5" type="method" name="testMethodA" crap="1" count="1"/>
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="9" type="stmt" count="1"/>
+      <line num="14" type="method" name="a" crap="1" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="21" type="method" name="b" crap="2" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="28" type="method" name="x" crap="2" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <metrics loc="31" ncloc="31" classes="2" methods="4" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="5" elements="13" coveredelements="7"/>
+    </file>
+    <metrics files="1" loc="31" ncloc="31" classes="2" methods="4" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="5" elements="13" coveredelements="7"/>
+  </project>
+</coverage>
