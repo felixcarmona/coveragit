@@ -1,5 +1,6 @@
 import sys
 import argparse
+from os import getcwd
 from coveragit.coverage import CoverageProcessor
 from coveragit.diff import AdditionsFinder
 from coveragit.application.console.display import Display
@@ -13,6 +14,7 @@ class Application:
                             help='Base branch, tag, commit, or history marker to compare the current revision')
         parser.add_argument('--concise', '-c', action='store_true', help='Only display the affected uncovered lines')
         parser.add_argument('--xml', '-x', type=str, default='coverage.xml', help='Path of the generated coverage .xml')
+        parser.add_argument('--repository', '-r', type=str, default=None, help='Path of the git repository')
         parser.add_argument('--silently', '-s', action='store_true',
                             help='Even with missing coverage, exit with success system exit status')
         parser.set_defaults(concise=False)
@@ -23,12 +25,16 @@ class Application:
         self._coverage_processor = CoverageProcessor()
         self._base = args.base
         self._xml = args.xml
+        self._repository = args.repository
+        if self._repository is None:
+            self._repository = getcwd()
+
         self._concise = args.concise
         self._silently = args.silently
 
     def run(self):
         try:
-            additions = self._additions_finder.get_additions_for_base(self._base)
+            additions = self._additions_finder.get_additions_for_base(self._base, self._repository)
             missing_coverage = self._coverage_processor.get_missing_coverage(additions, self._xml)
 
             if missing_coverage:
