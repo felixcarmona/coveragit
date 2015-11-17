@@ -24,7 +24,7 @@ class AdditionsFinder(object):
 
             file_name = file_name_matches[0]
             additions[file_name] = []
-            chunks = re.findall(r'^@@ .* \+(.*[^,0]) @@', raw_diff_file, re.MULTILINE)
+            chunks = re.findall(r'^@@ .* \+(\d+,[1-9]\d*) @@', raw_diff_file, re.MULTILINE)
             for chunk in reversed(chunks):
                 lines_range = chunk.split(',')
                 if len(lines_range) == 2:
